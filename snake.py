@@ -88,10 +88,10 @@ def check_quit(event):
 
 def check_events():
     global running
-    # TODO: create a for loop events is the variable pygame.event.get() is the list
+    for events in pygame.event.get():
         check_quit()
         move_snake()
-    pass  # TODO: remove this pass when done.
+
 
 def handle_snake():
     global body_coords
@@ -99,11 +99,11 @@ def handle_snake():
     global head_y
     global head_coord
     global snake_dx, snake_dy
-    # TODO: call body_coords.insert() method and pass in 0, head_coord
-    # TODO: call body_coords.pop()
-    # TODO: add snake_dx to head_x
-    # TODO: add snake_dy to head_y
-    # TODO: set head_coord to (head_x, head_y, SNAKE_SIZE, SNAKE_SIZE)
+    body_coords.insert(0)
+    body_coords.pop()
+    head_x = head_x + snake_dx
+    head_y = head_y + snake_dy
+    head_coord = (head_x, head_y, snake_size, snake_size)
 
 def reset_game_after_game_over(event):
     global is_paused, score, head_x, head_y, head_coord, body_coords, snake_dx, snake_dy
@@ -131,17 +131,14 @@ def check_game_over():
     global body_coords
     global running
     global is_paused
-    # TODO: if head_rect.left is negative or head_rect.right is greater than WINDOW_WIDTH or head_rect.top is negative or head_rect.bottom is greater than WINDOW_HEIGHT
-    # or head_coord in body_coords
-        # TODO: then do the following
-        # TODO: call display_surface.blit(game_over_text, game_over_rect)
-        # TODO: call display_surface.blit(continue_text, continue_rect)
-        # TODO: call pygame.display.update()
-        # TODO: set is_paused to True
-        # TODO: while is_paused
-            # TODO: for event in pygame.event.get()
-                # TODO: call reset_game_after_game_over(event)
-                # TODO: call check_end_game_after_game_over(event)
+    if head_rect.left < 0 or head_rect.right > window_width or head_rect.top < 0 or head_rect.bottom > window_height or head_coord in body_coords:
+        display_surface.blit(game_over_text, game_over_rect)
+        display_surface.blit(continue_text, continue_rect)
+        pygame.display.update()
+        is_paused = True
+        while is_pause:
+            reset_game_after_game_over(event)
+            check_end_game_after_game_over(event)
 
 def check_collisions():
     global score, apple_x, apple_y, apple_coord, body_coords
@@ -154,22 +151,19 @@ def check_collisions():
         body_coords.append(head_coord)
 
 def blit_hud():
-    # TODO: call display_surface.blit(title_text, title_rect)
-    # TODO: call display_surface.blit(score_text, score_rect)
-    pass  # TODO: remove this pass when done.
+    display_surface.blit(title_text, title_rect)
+    display_surface.blit(score_text, score_rect)
 
 def blit_assets():
     # TODO: for body in body_coords:
-        # TODO: call pygame.draw.rect(display_surface, DARKGREEN, body)
-    # TODO: set head_rect to pygame.draw.rect(display_surface, GREEN, head_coord)
-    # TODO: set apple_rect to pygame.draw.rect(display_surface, RED, apple_coord)
-    pass  # TODO: remove this pass when done.
+        pygame.draw.rect(display_surface, darkgreen, body)
+        head_rect = pygame.draw.rect(display_surface, green, head_coord)
+        apple_rect = pygame.draw.rect(display_surface, red, apple_coord)
 
 def update_display_and_tick_clock():
-    # TODO: call pygame.display.update()
-    # TODO: call clock.tick(FPS)
-    pass  # TODO: remove this pass when done.
-
+    pygame.display.update()
+    clock.tick(fps)
+    
 while running:
     # Check pygame events
     check_events()
